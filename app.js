@@ -14,40 +14,26 @@ angular.module('clients', ['ngRoute', 'indexedDB'])
 			});
 
 		$indexedDBProvider
-			.connection('myIndexedDB')
+			.connection('ClientsDB')
 			.upgradeDatabase(1, function(event, db, tx){
-				var objStore = db.createObjectStore('people', {keyPath: 'ssn'});
-				objStore.createIndex('name_idx', 'name', {unique: false});
-				objStore.createIndex('age_idx', 'age', {unique: false});
+				var objStore = db.createObjectStore('clients', {keyPath: 'id'});
+				objStore.createIndex('name', 'name', {unique: false});
+				objStore.createIndex('email', 'email', {unique: false});
+				objStore.createIndex('phone', 'phone', {unique: false});
+				console.log("upgradeDB OK");
 			})
-			.upgradeDatabase(2, function(event, db, tx){
-				db.createObjectStore('peoplePhones', {keyPath: 'person_ssn'});
-			});
 	})
 	.controller('ListClientsCtrl', function( $scope, $indexedDB ) {
-			$scope.clients = [{
-				'name': 'Иван',
-				'email': 'ivan@ivan',
-				'phone': '913 xxx xxxx'
-			},
-			{
-				'name': 'Петр',
-				'email': 'petr@petr',
-				'phone': '923 xxx xxxx'
-			}];
 
+		    $indexedDB.openStore('clients', function(store){
 
-			$scope.objects = [];
+		      store.insert({'id': 1, 'name': 'Petr Petrovich', 'email': 'petr@petrovich', 'phone': '913-xxx-xx-xx'});
+		      store.insert({'id': 2, 'name': 'Ivan Ivanovich', 'email': 'ivan@ivanovich', 'phone': '923-xxx-xx-xx'});
+		      store.insert({'id': 3, 'name': 'asdfasdf', 'email': 'iasdfh', 'phone': '9asdfxx'});
 
-		    $indexedDB.openStore('people', function(store){
-
-		      store.insert({"ssn": "444-444-222-111","name": "John Doe", "age": 57}).then(function(e){
-		      	console.log("promise");
-		      });
-
-		      store.getAll().then(function(people) {  
-		        // Update scope
-		        $scope.objects = people;
+		      store.getAll().then(function(clients) {  
+		        $scope.clients = clients;
+		        console.log("запись в scope");
 		      });
 		  })
 
