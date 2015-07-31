@@ -76,6 +76,7 @@ angular.module('clients', ['ui.router', 'indexedDB'])
 			.then(function(result) {
 				console.log(result);
 				$scope.person = {
+					'id': result.id,
 					'name': result.name,
 					'contacts': result.contacts
 				}
