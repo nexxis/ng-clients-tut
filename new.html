@@ -8,10 +8,11 @@
 		<div ng-repeat="contact in person.contacts">
 			<input type="text" ng-model="contact.type">
 			<input type="text" ng-model="contact.value">
-			<button ng-click="delContact()">Delete</button>
+			<button ng-click="delContact(contact)">Delete</button>
 		</div>
+		
 
 		<hr>
-		<input type="button" ng-click="addClient()" value="Добавить">
+		<input type="button" ng-click="addClient()" value="Добавить физ. лицо">
 	</form>
 </div>

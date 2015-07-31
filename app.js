@@ -1,16 +1,12 @@
 angular.module('clients', ['ui.router', 'indexedDB'])
 	.config (function ($urlRouterProvider, $stateProvider, $indexedDBProvider) {
-		console.log('123')
 		$urlRouterProvider.otherwise("/");
 
 		$stateProvider
 			.state('home', {
 				url: '/',
 				controller:'ListClientsCtrl',
-				templateUrl:'list.html',
-				onEnter: function() {
-					console.log('enter')
-				}
+				templateUrl:'list.html'
 			})
 			.state('new', {
 				url: '/new',
@@ -30,7 +26,6 @@ angular.module('clients', ['ui.router', 'indexedDB'])
 
 		    $indexedDB.openStore('clients', function(store){
 				// store.insert({'name': 'Petr Petrovich', 'email': 'petr@petrovich', 'phone': '913-xxx-xx-xx'});
-				// store.insert({'name': 'Ivan Ivanovich', 'email': 'ivan@ivanovich', 'phone': '923-xxx-xx-xx'});
 				store.getAll().then(function(clients) {  
 					$scope.clients = clients;
 				});
@@ -57,6 +52,13 @@ angular.module('clients', ['ui.router', 'indexedDB'])
 					$state.go('home')
 				});
 			})
+		};
+
+		$scope.delContact = function (contact) {
+			index = $scope.person.contacts.indexOf(contact)
+			if(index > -1) {
+				$scope.person.contacts.splice(index, 1)
+			}
 		};
 
 	});
