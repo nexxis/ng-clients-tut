@@ -103,4 +103,13 @@ angular.module('clients', ['ui.router', 'indexedDB'])
 			}
 		};
 
+		$scope.delClient = function () {
+			$indexedDB.openStore('clients', function(store) {
+				store.delete($stateParams.clientId)
+				.then(function() {
+					$state.go('home')
+				});
+			})
+		}
+
 	});
