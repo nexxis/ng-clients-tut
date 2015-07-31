@@ -76,7 +76,6 @@ angular.module('clients', ['ui.router', 'indexedDB'])
 			.then(function(result) {
 				console.log(result);
 				$scope.person = {
-					'id': result.id,
 					'name': result.name,
 					'contacts': result.contacts
 				}
@@ -89,7 +88,7 @@ angular.module('clients', ['ui.router', 'indexedDB'])
 
 		$scope.addClient = function () {
 			$indexedDB.openStore('clients', function(store) {
-				store.insert($scope.person)
+				store.upsert($scope.person)
 				.then(function() {
 					$state.go('home')
 				});
