@@ -18,7 +18,7 @@ angular.module('clients', ['ui.router', 'indexedDB'])
 			.connection('ClientsDB')
 			.upgradeDatabase(1, function(event, db, tx){
 				var objStore = db.createObjectStore('clients', {keyPath: 'id', autoIncrement:true });
-				objStore.createIndex('name', 'name', {unique: true});
+				objStore.createIndex('name', 'name', {unique: false});
 				objStore.createIndex('contacts', 'cantacts', {unique: false});
 			})
 	})
@@ -40,15 +40,14 @@ angular.module('clients', ['ui.router', 'indexedDB'])
 			'contacts': []
 		}
 
-		$scope.addContact = function() {
-			$scope.person.contacts.push({type: '', value: ''})
+		$scope.addContact = function(contactType, contactName) {
+			$scope.person.contacts.push({type: contactType, name: contactName, value: ''})
 		}
 
 		$scope.addClient = function () {
 			$indexedDB.openStore('clients', function(store) {
 				store.insert($scope.person)
-				.then(function(result) {
-					console.log('result', result)
+				.then(function() {
 					$state.go('home')
 				});
 			})
