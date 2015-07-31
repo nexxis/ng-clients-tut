@@ -1,6 +1,6 @@
 <h3>Новое физ. лицо</h3>
 <div>
-	<form ng-submit="addClient()">
+	<form ng-submit="addClient()" novalidate>
 		Ф.И.О. 
 		<input type="text" ng-model="person.name" required/>
 
@@ -9,7 +9,7 @@
 
 		<div ng-repeat="contact in person.contacts">
 			{{contact.name}} 
-			<input type="{{contact.type}}" ng-model="contact.value" required>
+			<input type="{{contact.type}}" ng-model="contact.value" ng-required>
 			<button ng-click="delContact(contact)">Delete</button>
 		</div>
 
