@@ -1,25 +1,29 @@
-angular.module('clients', ['ngRoute', 'indexedDB'])
-	.config (function ($routeProvider, $indexedDBProvider) {
-		$routeProvider
-			.when('/', {
+angular.module('clients', ['ui.router', 'indexedDB'])
+	.config (function ($urlRouterProvider, $stateProvider, $indexedDBProvider) {
+		console.log('123')
+		$urlRouterProvider.otherwise("/");
+
+		$stateProvider
+			.state('home', {
+				url: '/',
 				controller:'ListClientsCtrl',
-				templateUrl:'list.html'
+				templateUrl:'list.html',
+				onEnter: function() {
+					console.log('enter')
+				}
 			})
-			.when('/new', {
+			.state('new', {
+				url: '/new',
 				controller:'NewClientCtrl',
 				templateUrl:'new.html'
 			})
-			.otherwise({
-				redirectTo:'/'
-			});
 
 		$indexedDBProvider
 			.connection('ClientsDB')
 			.upgradeDatabase(1, function(event, db, tx){
 				var objStore = db.createObjectStore('clients', {keyPath: 'id', autoIncrement:true });
 				objStore.createIndex('name', 'name', {unique: true});
-				objStore.createIndex('email', 'email', {unique: false});
-				objStore.createIndex('phone', 'phone', {unique: false});
+				objStore.createIndex('contacts', 'cantacts', {unique: false});
 			})
 	})
 	.controller('ListClientsCtrl', function( $scope, $indexedDB ) {
@@ -34,19 +38,23 @@ angular.module('clients', ['ngRoute', 'indexedDB'])
 
 
 	})
-	.controller('NewClientCtrl', function( $scope, $indexedDB ) {
+	.controller('NewClientCtrl', function( $scope, $indexedDB, $state) {
 
-		$indexedDB.openStore('clients', function(store){
-			store.getAll().then(function(clients) {  
-				$scope.clients = clients;
-			});
-		})
+		$scope.person = {
+			'name': '',
+			'contacts': []
+		}
 
-		$scope.newClient = function () {
-			$indexedDB.openStore('clients', function(store){
-				store.insert({'name': 'New', 'email': 'new@new', 'phone': '9139139131'});
-				store.getAll().then(function(clients) {  
-					$scope.clients = clients;
+		$scope.addContact = function() {
+			$scope.person.contacts.push({type: '', value: ''})
+		}
+
+		$scope.addClient = function () {
+			$indexedDB.openStore('clients', function(store) {
+				store.insert($scope.person)
+				.then(function(result) {
+					console.log('result', result)
+					$state.go('home')
 				});
 			})
 		};

@@ -2,6 +2,7 @@
 
 <div class="client" ng-repeat="client in clients">
 	<div>Имя: {{client.name}}</div>
-	<div>E-mail: {{client.email}}</div>
-	<div>Телефон: {{client.phone}}</div>
+	<div ng-repeat="contact in client.contacts">
+		<div>{{contact.type}}: {{contact.value}}</div>
+	</div>
 </div>
