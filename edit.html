@@ -1,0 +1,19 @@
+<h3>Новое физ. лицо</h3>
+<div>
+	<form ng-submit="addClient()">
+		Ф.И.О. 
+		<input type="text" ng-model="person.name" required/>
+
+		<input type="button" value="Добавить e-mail" ng-click="addContact('email', 'E-mail')">
+		<input type="button" value="Добавить телефон" ng-click="addContact('number', 'Телефон')">
+
+		<div ng-repeat="contact in person.contacts">
+			{{contact.name}} 
+			<input type="{{contact.type}}" ng-model="contact.value" required>
+			<button ng-click="delContact(contact)">Delete</button>
+		</div>
+
+		<hr>
+		<input type="submit" value="Добавить физ. лицо">
+	</form>
+</div>
