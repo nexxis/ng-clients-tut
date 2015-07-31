@@ -66,10 +66,22 @@ angular.module('clients', ['ui.router', 'indexedDB'])
 		};
 
 	})
-	.controller('EditClientCtrl', function( $scope, $indexedDB, $state ) {
+	.controller('EditClientCtrl', function( $scope, $indexedDB, $state, $stateParams) {
+        
+		$stateParams.clientId = +$stateParams.clientId;
+		
 
-		var clientId = $stateParams.clientId;
-		console.log(clientId);
+		$indexedDB.openStore('clients', function(store) {
+			store.find($stateParams.clientId)
+			.then(function(result) {
+				console.log(result);
+				$scope.person = {
+					'id': result.id,
+					'name': result.name,
+					'contacts': result.contacts
+				}
+			});
+		})
 
 		$scope.addContact = function(contactType, contactName) {
 			$scope.person.contacts.push({type: contactType, name: contactName, value: ''})
