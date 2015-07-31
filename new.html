@@ -1,16 +1,12 @@
 <h3>Новое физ. лицо</h3>
-<form name="addClient">
+<div ng-controller="NewClientCtrl">
+	<form>
+		<input type="button" ng-click="newClient()" value="Добавить">
+	</form>
+</div>
 
-		<label>Имя</label>
-		<input type="text" name="name" ng-model="client.name">
-
-		<label>E-mail</label>
-		<input type="text" name="email" ng-model="client.email">
-
-		<label>Телефон</label>
-		<input type="text" name="phone" ng-model="client.phone">
-
-		<br>
-		  <a href="#/">Отмена</a>
-		  <button ng-click="">Сохранить</button>
-</form>
+<div class="client" ng-repeat="client in clients">
+	<div>Имя: {{client.name}}</div>
+	<div>E-mail: {{client.email}}</div>
+	<div>Телефон: {{client.phone}}</div>
+</div>
